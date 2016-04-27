@@ -12,12 +12,9 @@ router.get('/meals', function(req, res, next) {
     });
   })
   .catch(function(err){
-    console.log(err);
     next(err);
   });
 });
-
-
 
 router.post('/addmeal', function(req, res,next){
   var meal = req.body;
@@ -28,7 +25,6 @@ router.post('/addmeal', function(req, res,next){
     });
   })
   .catch(function(err){
-    console.log(err);
     next(err);
   });
 });

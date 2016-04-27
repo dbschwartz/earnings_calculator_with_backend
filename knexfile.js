@@ -2,6 +2,11 @@
 
 module.exports = {
 
+  test: {
+    client: 'pg',
+    connection: 'postgres://localhost/earnings_calculator_test'
+  },
+
   development: {
     client: 'pg',
     connection: 'postgres://localhost/earnings_calculator'
@@ -11,5 +16,5 @@ module.exports = {
     client: 'pg',
     connection: process.env.DATABASE_URL
   }
-  
+
 };

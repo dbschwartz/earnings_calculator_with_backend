@@ -12,20 +12,29 @@ chai.use(chaiHttp);
 describe('API routes', function() {
 
     beforeEach(function(done) {
-        knex.migrate.rollback.then(function() {
+        knex.migrate.rollback().then(function() {
             knex.migrate.latest()
                 .then(function() {
                     return knex.seed.run().then(function() {
                         done()
                     });
                 })
+                .catch(function(err){
+                    console.log(err);
+                    done()
+                });
         });
     });
 
     afterEach(function(done) {
-        knex.migrate.rollback().then(function() {
+        knex.migrate.rollback()
+          .then(function() {
             done();
-        });
+          })
+          .catch(function(err){
+              console.log(err);
+              done()
+          });
     });
 
     describe('Get all meals', function() {
@@ -33,6 +42,7 @@ describe('API routes', function() {
             chai.request(server)
                 .get('/meals')
                 .end(function(err, res) {
+                    console.log(res.body);
                     res.status.should.equal(200);
                     res.type.should.equal('application/json');
                     res.body.should.be.a('object');

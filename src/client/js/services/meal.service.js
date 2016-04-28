@@ -5,8 +5,13 @@ angular.module('myApp')
 
 // ** mealService ** //
 
+//Dependency Injection
+mealService.$inject = ['crudService'];
+
+
+
 // Declaration of the Meal Service Function 
-function mealService() {
+function mealService(crudService) {
 
   // container for all meals and $$$ totals
   var meals = {
@@ -55,7 +60,8 @@ function mealService() {
       // The code below pushes the calculated meal object to the mealSerivce meals array,
       // meals.list  . Subsequently the listwide count, tipTotal, total, and averageTipPerMeal
       // amounts are updated
-      meals.list.push(calculatedMeal);
+      crudService.addMeal(calculatedMeal);
+      //meals.list.push(calculatedMeal);
       meals.count += 1;
       meals.tipTotal += calculatedMeal.tip;
       meals.total += calculatedMeal.total;
@@ -78,6 +84,7 @@ function mealService() {
     // The getMealList function is used by the Earings Controler to grab all computed
     // meals that have been added to the meal list
     getMealList: function() {
+      meals = crudService.getMeals();
       return meals;
     },
     // The resetMealList function is used by the Earnings Controller to completely reset the

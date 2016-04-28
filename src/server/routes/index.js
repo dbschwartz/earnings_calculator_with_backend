@@ -3,6 +3,10 @@ var router = express.Router();
 var queries = require("../../../queries");
 var knex = require('../../../db/knex.js');
 
+router.get('/', function(req, res, next) {
+  res.sendFile('/index.html');
+});
+
 
 router.get('/meals', function(req, res, next) {
   queries.getMeals().then(function(meals){

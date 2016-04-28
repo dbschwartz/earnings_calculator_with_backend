@@ -122,8 +122,4 @@ function earningsCtrl($scope, mealService) {
   // to do this by reassigning the $scope.mealList to the now empty mealService meals 
   // object a la $scope.mealList = mealService.getMealList();.  I am still not sure
   // why I need to do this.
-  $scope.resetMeals = function(){
-    mealService.resetMealList();
-    $scope.mealList = mealService.getMealList();
-  };
 }

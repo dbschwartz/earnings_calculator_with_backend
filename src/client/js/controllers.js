@@ -8,6 +8,18 @@ angular.module('myApp')
   .controller('earningsCtrl', earningsCtrl);
 
 
+// function getMeals(){
+//   mealService.getMeals()
+//     .then(function(meals){
+//       $scope.mealList = meals;
+//       $scope.currentMeal = mealService.getCurrentMealID() 
+//     })
+//     .catch(function(err){
+//       console.log(err);
+//     });
+// }
+
+
 // ** detailsCtrl ** //
 
 // Dependency Injection for Details Controller 
@@ -21,8 +33,14 @@ function detailsCtrl($scope, mealService) {
   // on the details page.
   // The $scope.currentMeal variable receives its value by calling the mealService 
   // getCurrentMealID function and storing its return value.  
+    mealService.getMeals()
+    .then(function(meals){
+      $scope.currentMeal = mealService.getCurrentMealID() 
+    })
+    .catch(function(err){
+      console.log(err);
+    });
   
-  $scope.currentMeal = mealService.getCurrentMealID() 
   //The $scope.getMeal function calculates the tip and tax totals for the meal entered on
   // the details page.  It does this by doing the following:
   // 1. Using ng-submit in charges.html to receive the request body in the form of the parameter
@@ -40,10 +58,23 @@ function detailsCtrl($scope, mealService) {
 
 
  
-  $scope.getMeal = function(meal){
-    var calculatedMeal = mealService.getMealTotal(meal);
-    mealService.addMeal(calculatedMeal);
-    $scope.currentMeal = mealService.getCurrentMealID()
+  $scope.addMeal = function(meal){
+    //console.log("add meal function");
+    mealService.addMeal(meal)
+    .then(function(){
+      mealService.getMeals()
+      .then(function(meals){
+          $scope.currentMeal = mealService.getCurrentMealID();
+         
+ 
+        })
+      .catch(function(err){
+        console.log(err);
+        });
+     })
+    .catch(function(err){
+      console.log(err);
+    })
     this.meal = {};
   };
 }
@@ -60,7 +91,13 @@ function chargesCtrl($scope, mealService) {
   // to grab the latest computed meal object added to the list. This is
   // used so the user can review the computed amounts for the details he/she
   // just entered.
-  $scope.currentMeal = mealService.getCurrentMeal();
+  mealService.getMeals()
+  .then(function(){
+    $scope.currentMeal = mealService.getCurrentMeal();
+   })
+  .catch(function(err){
+    console.log(err);
+  })
 }
 
 
@@ -73,7 +110,13 @@ function earningsCtrl($scope, mealService) {
   // The $scope.mealList variable invokes the mealService.getMealList() function
   // to grab all the computed meals that have been added tot he meal list.  Here
   // it seems the data updates automatically
-  $scope.mealList = mealService.getMealList();
+  mealService.getMeals()
+    .then(function(meals){
+      $scope.mealList = meals;
+    })
+    .catch(function(err){
+      console.log(err);
+    });
   // The $scope.resetMeals function invokes the mealService.resetMealList() function
   // to reset the meals object and completely reset the app.  However, I was only able
   // to do this by reassigning the $scope.mealList to the now empty mealService meals 

@@ -21,8 +21,48 @@ function mealService(crudService) {
     total: 0,
     averageTipPerMeal: 0
   };
-    //Meal Service function singleto`n return object 
+    //Meal Service function singleton return object 
+  function init() {
+    meals = {
+      list: [],
+      count: 0,
+      tipTotal: 0,
+      total: 0,
+      averageTipPerMeal: 0
+    };
+  }
   return {
+    getMeals: function(){
+      init();
+      return crudService.getMeals()
+        .then(function(list){
+          meals.list=list.data.data;
+          var id =1;
+          meals.list.forEach(function(meal) {
+            meal.base_price=parseFloat(meal.base_price);
+            meal.tax_rate=parseFloat(meal.tax_rate);
+            meal.tip_rate=parseFloat(meal.tip_rate);
+            meal.id = id;
+            id++;
+            meal.tax = meal.tax_rate/100 * meal.base_price;
+            meal.subTotal = meal.tax + meal.base_price;
+            meal.tip = meal.base_price * meal.tip_rate/100;
+            meal.total = meal.subTotal + meal.tip;
+          });
+          meals.count = meals.list.length;
+          meals.list.forEach(function(meal){
+            meals.tipTotal+=meal.tip;
+            meals.total+=meal.total;
+          });
+          meals.averageTipPerMeal = meals.tipTotal / meals.count; 
+          return meals;
+          })
+        .catch(function(err){
+          console.log(err);
+        })
+    },
+
+
     // The get getCurrentMealID function grabs the current meal ID 
     // for the details ControllerPage and is used so that the "Enter details for Meal # X"
     // header on the details page displays the proper meal number
@@ -33,44 +73,36 @@ function mealService(crudService) {
     },
     // This function calculates tip and tax amounts for the meal submitted by the Details Controller.
     // The meal is represented by the object parameter named meal.
-    getMealTotal: function(meal) {
-      // 
-      var calculatedMeal = {};
-      calculatedMeal.price = meal.price;
-      calculatedMeal.taxRate = meal.taxrate;
-      calculatedMeal.tax = meal.taxrate / 100 * meal.price;
-      calculatedMeal.subTotal = calculatedMeal.tax + meal.price;
-      calculatedMeal.tipRate =meal.tiprate;
-      calculatedMeal.tip = meal.price * meal.tiprate / 100;
-      calculatedMeal.total = calculatedMeal.subTotal + calculatedMeal.tip;
-      return calculatedMeal;
-    },
-    // The addMeal function adds the result of the calculated meal above 
-    // to the meal list
-    addMeal: function(calculatedMeal) {
-      //The if statement assigns an id to each meal.
-      //If there are no meals the first meal will be assigned an id of 1,
-      // and each subsequent meal will have an id of the meal count incremented
-      // by one, similar to current meal id above.
-      if(meals.count === 0) {
-        calculatedMeal.id = 1;
-      } else{
-        calculatedMeal.id = meals.count+1;
-      }
-      // The code below pushes the calculated meal object to the mealSerivce meals array,
-      // meals.list  . Subsequently the listwide count, tipTotal, total, and averageTipPerMeal
-      // amounts are updated
-      crudService.addMeal(calculatedMeal);
-      //meals.list.push(calculatedMeal);
-      meals.count += 1;
-      meals.tipTotal += calculatedMeal.tip;
-      meals.total += calculatedMeal.total;
-      meals.averageTipPerMeal = meals.tipTotal/meals.count;
-      return meals;
-    },
+
+    addMeal: function(meal) {
+    return crudService.addMeal(meal)
+           .then(function(){
+              var id = meals.count+1; 
+              var newestMealIndex = meals.list.length-1;
+              var list = meals.list;
+              list[newestMealIndex].id = id;
+              list[newestMealIndex].tax = list[newestMealIndex].tax_rate/100 *meal.base_price;
+              list[newestMealIndex].subTotal = list[newestMealIndex].tax + list[newestMealIndex].base_price;
+              list[newestMealIndex].tip = list[newestMealIndex].base_price * list[newestMealIndex].tip_rate/100;
+              list[newestMealIndex].total = list[newestMealIndex].subTotal + list[newestMealIndex].tip;
+              meals.tipTotal+=list[newestMealIndex].tip;
+              meals.total += list[newestMealIndex].total;
+              meals.averageTipPerMeal = meals.tipTotal / meals.count;
+              return list[newestMealIndex];
+            })
+           .catch(function(err){
+            console.log(err);
+           })
+   },
+      
+
+
+
+
     getCurrentMeal: function() {
       // The getCurrentMeal function is utilized by the Charge Controller
-      // to grab the most recent computed meal added to the meal list
+      
+      // ab the most recent computed meal added to the meal list
       var currentMealIndex = meals.list.length-1;
       // I was trying to have No meals have been added! displayed on the Charges
       // page if no meals had been submitted by the user.  This could probably done
@@ -83,20 +115,7 @@ function mealService(crudService) {
     },
     // The getMealList function is used by the Earings Controler to grab all computed
     // meals that have been added to the meal list
-    getMealList: function() {
-      meals = crudService.getMeals();
-      return meals;
-    },
-    // The resetMealList function is used by the Earnings Controller to completely reset the
-    // app.  I am not sure why it is necessary to return meals if there is 2 way data binding.
-    resetMealList: function() {
-      meals= {
-        list: [],
-        count: 0,
-        tipTotal: 0,
-        total: 0,
-        averageTipPerMeal: 0
-      };
-     }
+    
+  
   };
 }

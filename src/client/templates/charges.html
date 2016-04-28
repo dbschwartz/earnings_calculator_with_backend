@@ -1,12 +1,12 @@
 <div>
   <h3>Details for Meal {{currentMeal.id}}</h3>
   <ul class="list-group">
-    <li class="list-group-item">Meal price: {{currentMeal.price | currency}}</li>
-    <li class="list-group-item">Tax Percentage: {{currentMeal.taxRate}}%</li>
-    <li class="list-group-item">Tip Percentage: {{currentMeal.tipRate}}%</li>
-    <li class="list-group-item">Tax: Tax Rate {{currentMeal.taxRate}}% * Meal Price {{currentMeal.price | currency}} = {{currentMeal.tax | currency}}</li>
+    <li class="list-group-item">Meal price: {{currentMeal.base_price | currency}}</li>
+    <li class="list-group-item">Tax Percentage: {{currentMeal.tax_rate}}%</li>
+    <li class="list-group-item">Tip Percentage: {{currentMeal.tip_rate}}%</li>
+    <li class="list-group-item">Tax: Tax Rate {{currentMeal.tax_rate}}% * Meal Price {{currentMeal.base_price | currency}} = {{currentMeal.tax | currency}}</li>
     <li class="list-group-item">Subtotal: Tax {{currentMeal.tax | currency}} + Meal Price {{currentMeal.price | currency}} = {{currentMeal.subTotal | currency}}</li>
-    <li class="list-group-item">Tip: Tip Rate {{currentMeal.tipRate}}% * Meal Price {{currentMeal.price | currency}} = {{currentMeal.tip | currency}}</li>
+    <li class="list-group-item">Tip: Tip Rate {{currentMeal.tip_rate}}% * Meal Price {{currentMeal.base_price | currency}} = {{currentMeal.tip | currency}}</li>
     <li class="list-group-item">Total: Meal SubTotal {{currentMeal.subTotal | currency}} + Tip {{currentMeal.tip | currency}} =  {{currentMeal.total | currency}}</li>
   </ul>
 </div>

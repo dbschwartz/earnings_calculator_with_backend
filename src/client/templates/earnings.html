@@ -10,12 +10,12 @@
 <div ng-repeat="meal in mealList.list">
   <ul class="list-group">
     <li class="list-group-item">Meal {{meal.id}}</li>
-    <li class="list-group-item">Meal price: {{meal.price | currency}}</li>
-    <li class="list-group-item">Tax Percentage: {{meal.taxRate}}%</li>
-    <li class="list-group-item">Tip Percentage: {{meal.tipRate}}%</li>
-    <li class="list-group-item">Tax: Tax Rate {{meal.taxRate}}% * Meal Price {{meal.price | currency}} = {{meal.tax | currency}}</li>
-    <li class="list-group-item">Subtotal: Tax {{meal.tax | currency}} + Meal Price {{meal.price | currency}} = {{meal.subTotal | currency}}</li>
-    <li class="list-group-item">Tip: Tip Rate {{meal.tipRate}}% * Meal Price {{meal.price | currency}} = {{meal.tip | currency}}</li>
+    <li class="list-group-item">Meal price: {{meal.base_price | currency}}</li>
+    <li class="list-group-item">Tax Percentage: {{meal.tax_rate}}%</li>
+    <li class="list-group-item">Tip Percentage: {{meal.tip_rate}}%</li>
+    <li class="list-group-item">Tax: Tax Rate {{meal.tax_rate}}% * Meal Price {{meal.base_price | currency}} = {{meal.tax | currency}}</li>
+    <li class="list-group-item">Subtotal: Tax {{meal.tax | currency}} + Meal Price {{meal.base_price | currency}} = {{meal.subTotal | currency}}</li>
+    <li class="list-group-item">Tip: Tip Rate {{meal.tip_rate}}% * Meal Price {{meal.base_price | currency}} = {{meal.tip | currency}}</li>
     <li class="list-group-item">Total: Meal SubTotal {{meal.subTotal | currency}} + Tip {{meal.tip | currency}} =  {{meal.total | currency}}</li>
   </ul>
 </div>

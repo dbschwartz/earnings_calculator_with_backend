@@ -1,16 +1,16 @@
 <h1>Enter details for Meal # {{currentMeal}}</h1>
-  <form name="postForm" ng-submit="getMeal(meal)">
+  <form name="postForm" ng-submit="addMeal(meal)">
     <fieldset class="form-group">
       <strong>Base Meal Price: $</strong>
-      <input ng-model="meal.price" type="number" class="form-control"  title="price">
+      <input ng-model="meal.base_price" type="number" class="form-control"  title="base_price">
     </fieldset>
     <fieldset class="form-group">
       <strong>Tax Rate: %</strong>
-      <input ng-model="meal.taxrate" type="number" class="form-control"  title='taxrate' step='0.01'>
+      <input ng-model="meal.tax_rate" type="number" class="form-control"  title='tax_rate' step='0.01'>
     </fieldset>
     <fieldset class="form-group">
       <strong>Tip Percentage: %</strong>
-      <input ng-model="meal.tiprate" type="number" class="form-control"  title='tip' step='0.01'>
+      <input ng-model="meal.tip_rate" type="number" class="form-control"  title='tip_rate' step='0.01'>
     <br>
     <input type="submit" class="btn btn-primary pull-left" value="Add Meal">
     </fieldset>
